@@ -10,9 +10,9 @@
 using namespace std;
 
 // return the generated array with a range of numbers between 1 and 1000.
-vector<int> generateArray(const int size){
+vector<int> generateArray(const size_t size){
     vector<int> array(size);
-    for (int i = 0; i < size; i++){
+    for (size_t i = 0; i < size; i++){
         array[i] = 1 + rand() % 1000; 
     }
     return array;
@@ -55,8 +55,8 @@ void selectionSortOdd(vector<int>& array){
 }
 
 // The function of checking whether the array is sorted in ascending order
-bool arraySortedCheck(const vector<int>& array) {
-    for (int i = 1; i < array.size(); i++) {
+bool arraySortedCheck(const vector<int> array) {
+    for (size_t i = 1; i < array.size(); i++) {
         if (array[i] < array[i - 1]) {
             return false;
         }
@@ -78,25 +78,81 @@ bool arraySortedCheckOdd(const vector<int> array) {
     return true;
 }
 
-// A function with a message output
-bool checkSort(const vector<int> array, string message) {
-    if (!arraySortedCheckOdd(array)) {
-        cout << "Test failed on " << message << endl;
-        return false;
-    }
-    return true;
-}
-
-// 
+// Output of array elements
 void printArray(const vector<int> array) {
     for (int x : array) {
         cout << x << " ";
     }
 }
 
+bool testSelectionCorrect() {
+    // test 1
+    vector<int> array_test1 = {5, 2, 9, 1, 5};
+    vector<int> expected_test1 = {1, 2, 5, 5, 9};
+    selectionSort(array_test1);
+    if (array_test1 != expected_test1) {
+        cout << "Test 1 failed: expected ";
+        printArray(expected_test1);
+        cout << ", got ";
+        printArray(array_test1);
+        cout << "\n";
+        return false;
+    }
+
+    // test 2
+    vector<int> array_test2 = {10, 3, 6, 7, 8, 1};
+    vector<int> expected_test2 = {1, 3, 6, 7, 8, 10};
+    selectionSort(array_test2);
+    if (array_test2 != expected_test2) {
+        cout << "Test 2 failed: expected ";
+        printArray(expected_test2);
+        cout << ", got ";
+        printArray(array_test2);
+        cout << "\n";
+        return false;
+    }
+
+    // test 3
+    vector<int> array_test3 = {};
+    vector<int> expected_test3 = {};
+    selectionSort(array_test3);
+    if (array_test3 != expected_test3) {
+        cout << "Test 3 failed: expected empty array, got ";
+        printArray(array_test3);
+        cout << "\n";
+        return false;
+    }
+
+    // test 4
+    vector<int> array_test4 = {1, 2, 3, 4, 5};
+    vector<int> expected_test4 = {1, 2, 3, 4, 5};
+    selectionSort(array_test4);
+    if (array_test4 != expected_test4) {
+        cout << "Test 4 failed: expected ";
+        printArray(expected_test4);
+        cout << ", got ";
+        printArray(array_test4);
+        cout << "\n";
+        return false;
+    }
+
+    // test 5
+    srand(time(nullptr));
+    const int size = 20;
+    vector<int> array_test5 = generateArray(size);
+    selectionSort(array_test5);
+
+    if (!arraySortedCheck(array_test5)) {
+        cout << "Test 5 failed: random array not sorted correctly\n";
+        return false;   
+    }
+
+    cout << "All selection sort tests passed successfully\n";
+    return true;
+}
 
 // test for correctness of select sort.
-bool testSelectionCorrect() {
+bool testSelectionCorrectOdd() {
 
     // test1: check the sorting of odd numbers when in an array
     vector<int> array_test1 = {5, 2, 9, 1, 5};
@@ -129,12 +185,28 @@ bool testSelectionCorrect() {
         return false;
     }
 
-    cout << "All tests passed successfully\n";
+    cout << "All selection sort odd tests passed successfully\n";
     return true;
 }
 
-
 int main() {
     testSelectionCorrect();
+    testSelectionCorrectOdd();
+
+    cout << "Enter the size of the array: ";
+    int n;
+    cin >> n;
+    vector<int> Array(n);
+    cout << "Enter the array elements: \n";
+    for (int i = 0; i < n; i++) {
+        cin >> Array[i];
+    }
+
+    selectionSortOdd(Array);
+
+    cout << "An array after sorting only odd elements: \n";
+    printArray(Array);
+    cout << "\n";
+
     return 0;
 }
